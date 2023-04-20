@@ -10,8 +10,17 @@ workflows:
       Next steps:
       - Check out [Getting started with iOS apps](https://devcenter.bitrise.io/en/getting-started/getting-started-with-ios-apps.html).
     steps:
+    - git::https://github.com/bitrise-steplib/bitrise-step-activate-tuist-cache@main:
+        title: Activate Tuist remote cache
     - activate-ssh-key@4: {}
     - git-clone@6: {}
+    - script:
+        title: Tuist cache warm
+        inputs:
+        - content: |-
+            set -ex
+            tuist fetch
+            tuist cache warm --dependencies-only
     - cache-pull@2: {}
     - tuist@0:
         inputs:
@@ -22,7 +31,7 @@ workflows:
     - deploy-to-bitrise-io@2: {}
 meta:
   bitrise.io:
-    stack: osx-xcode-14.0.x
+    stack: osx-xcode-14.3.x-ventura
     machine_type_id: g2-m1.8core
 app:
   envs:
